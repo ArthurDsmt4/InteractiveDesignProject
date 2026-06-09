@@ -1,0 +1,132 @@
+body {
+  background-color: #08111f;
+  color: #f8fafc;
+  font-family: Inter, system-ui, sans-serif;
+  margin: 0;
+}
+
+.stage {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 24px;
+}
+
+.app-container {
+  width: 360px;
+  height: 640px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.app-header h1 {
+  font-size: 1.5rem;
+  margin: 0 0 4px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #f8fafc;
+}
+
+.app-header p {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.viewscreen {
+  flex-grow: 1;
+  background: #1e293b;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #334155;
+}
+
+.screen-content {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Screen 1: Scan Mode Visual Mockups */
+.scan-bg {
+  background: #1e293b;
+}
+
+.stencil-shape {
+  width: 120px;
+  height: 120px;
+  border: 4px dashed #00ffcc;
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(0, 255, 200, 0.3);
+}
+
+.skateboard-stencil {
+  width: 160px;
+  height: 20px;
+  border: 4px dashed #00ffcc;
+  border-radius: 6px;
+  margin-top: 40px;
+}
+
+/* Screen 2: Animated Payoff Layout */
+.mural-bg {
+  background: #090d16; /* Represents the wall background */
+}
+
+.mural-character {
+  width: 110px;
+  height: 110px;
+  background: #ff007f; /* Placeholder for your cut-out character image */
+  border-radius: 50%;
+  box-shadow: 0 10px 25px rgba(255, 0, 127, 0.4);
+  touch-action: none;
+  z-index: 2;
+}
+
+.mural-skateboard {
+  width: 150px;
+  height: 24px;
+  background: #fbbf24; /* Placeholder for your cut-out skateboard image */
+  border-radius: 8px;
+  margin-top: 30px;
+  z-index: 1;
+}
+
+/* Form Action Button Styling */
+.action-button {
+  background: #00ffcc;
+  border: 0;
+  border-radius: 12px;
+  color: #08111f;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-top: 16px;
+  padding: 16px;
+  width: 100%;
+  letter-spacing: 0.5px;
+  transition: background 0.2s;
+}
+
+.btn-reset {
+  background: #ff007f;
+  color: #ffffff;
+}
