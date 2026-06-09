@@ -35,7 +35,6 @@ body {
   margin: 0 0 4px 0;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #f8fafc;
 }
 
 .app-header p {
@@ -60,57 +59,104 @@ body {
   top: 0;
   left: 0;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-/* Screen 1: Scan Mode Visual Mockups */
+/* Screen 1 Setup */
 .scan-bg {
-  background: #1e293b;
+  background: #151d2a;
 }
 
-.stencil-shape {
-  width: 120px;
-  height: 120px;
-  border: 4px dashed #00ffcc;
-  border-radius: 50%;
-  box-shadow: 0 0 15px rgba(0, 255, 200, 0.3);
+.stencil-silhouette {
+  width: 180px;
+  height: auto;
+  /* Turns the image into a glowing neon green stencil outline */
+  filter: invert(62%) sepia(90%) saturate(1478%) hue-rotate(123deg)
+    brightness(101%) contrast(101%);
 }
 
-.skateboard-stencil {
-  width: 160px;
-  height: 20px;
-  border: 4px dashed #00ffcc;
-  border-radius: 6px;
-  margin-top: 40px;
+/* Screen 2 Setup: Layers Assembly */
+.interactive-wall {
+  background: #232731; /* Base gray mural background wall color */
 }
 
-/* Screen 2: Animated Payoff Layout */
-.mural-bg {
-  background: #090d16; /* Represents the wall background */
+.scale-assembly {
+  position: relative;
+  /* 🛠️ GLOBAL SCALE DOWN: Reduced the overall framework frame size so it fits cleanly inside your screen window dimensions */
+  width: 190px;
+  height: 280px;
 }
 
-.mural-character {
-  width: 110px;
-  height: 110px;
-  background: #ff007f; /* Placeholder for your cut-out character image */
-  border-radius: 50%;
-  box-shadow: 0 10px 25px rgba(255, 0, 127, 0.4);
-  touch-action: none;
-  z-index: 2;
-}
-
-.mural-skateboard {
-  width: 150px;
-  height: 24px;
-  background: #fbbf24; /* Placeholder for your cut-out skateboard image */
-  border-radius: 8px;
-  margin-top: 30px;
+/* Stationary base layer */
+.layer-base-pillar {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  position: absolute;
+  top: 0;
+  left: 0;
   z-index: 1;
 }
 
-/* Form Action Button Styling */
+/* Moving parent layer crossbar */
+.layer-crossbar-wrapper {
+  width: 100%;
+  height: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: absolute;
+  z-index: 2;
+  cursor: pointer;
+
+  /* SHIFT UP: Pulls the horizontal crossbar right to the top pivot peg of the column */
+  top: -58%;
+  left: 2%;
+
+  /* Tells the crossbar to pivot right from the upper center peg hole */
+  transform-origin: 50% 24%;
+}
+
+/* ====================================================
+   🛠️ FIXED BASKETS POSITIONING (UNSCRAMBLES THE SOUP)
+   ==================================================== */
+
+.nested-basket-left {
+  /* 🛠️ ASSET SIZE SHRUNK: Dropped scale width from 80px to 55px to mirror the new compressed wrapper box */
+  width: 55px;
+  height: auto;
+  position: absolute;
+  z-index: 3;
+  pointer-events: none; /* Keeps it from blocking clicks to the right basket */
+
+  /* SHIFT LEFT: Change this percentage if it needs to move closer to or further from the center bar */
+  left: -11%;
+  /* SHIFT DOWN: Re-calibrated to match the new height of the crossbar hooks */
+  top: 48%;
+
+  /* Pin attachment rotation pivot point (center top of its own strings) */
+  transform-origin: 50% 0%;
+}
+
+.nested-basket-right {
+  /* 🛠️ ASSET SIZE SHRUNK: Dropped scale width from 80px to 55px to mirror the new compressed wrapper box */
+  width: 55px;
+  height: auto;
+  position: absolute;
+  z-index: 4;
+  cursor: pointer;
+
+  /* SHIFT RIGHT: Change this percentage if it needs to move closer to or further from the center bar */
+  left: 78%;
+  /* SHIFT DOWN: Match the vertical hook alignment of the left basket */
+  top: 58%;
+
+  /* Pin attachment rotation pivot point (center top of its own strings) */
+  transform-origin: 50% 0%;
+}
+
+/* Form Action Buttons */
 .action-button {
   background: #00ffcc;
   border: 0;
@@ -123,7 +169,6 @@ body {
   padding: 16px;
   width: 100%;
   letter-spacing: 0.5px;
-  transition: background 0.2s;
 }
 
 .btn-reset {
