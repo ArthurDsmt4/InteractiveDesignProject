@@ -69,8 +69,11 @@ body {
 }
 
 .stencil-silhouette {
-  width: 180px;
+  width: 115px;
   height: auto;
+  position: absolute;
+  top: 32%;
+  left: 32%;
   /* Turns the image into a glowing neon green stencil outline */
   filter: invert(62%) sepia(90%) saturate(1478%) hue-rotate(123deg)
     brightness(101%) contrast(101%);
@@ -174,4 +177,137 @@ body {
 .btn-reset {
   background: #ff007f;
   color: #ffffff;
+}
+
+/* Container holds the flight route bounds */
+.butterfly-flight-path {
+  position: absolute;
+  z-index: 10;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Graphic inside handles the high-speed wing flap */
+.flapping-wings {
+  width: 45px; /* Sized perfectly for your container layout frame */
+  height: auto;
+  animation: organicWingFlap 0.15s infinite alternate ease-in-out;
+}
+
+@keyframes organicWingFlap {
+  0% {
+    transform: scaleX(1);
+  }
+  100% {
+    transform: scaleX(
+      0.15
+    ); /* Compresses wing width to look like a real vertical downstroke */
+  }
+}
+
+/* ====================================================
+   📱 SELECTION MENU HUB SYSTEM
+   ==================================================== */
+
+.hub-layout {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.hub-intro {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.hub-intro h2 {
+  font-size: 1.2rem;
+  margin: 0 0 6px 0;
+  color: #00ffcc;
+}
+
+.hub-intro p {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.mural-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mural-card-button {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.2s ease;
+}
+
+.card-status-dot {
+  width: 8px;
+  height: 8px;
+  background: #00ffcc;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #00ffcc;
+  flex-shrink: 0;
+}
+
+/* Gray out placeholder cards slightly */
+.mural-card-button:not(:first-child) .card-status-dot {
+  background: #64748b;
+  box-shadow: none;
+}
+
+.card-info h3 {
+  margin: 0 0 2px 0;
+  font-size: 0.9rem;
+  color: #f8fafc;
+}
+
+.card-info span {
+  font-size: 0.7rem;
+  color: #64748b;
+}
+
+/* Ensure our hub layout works perfectly with viewscreen positioning */
+.viewview-box {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ====================================================
+   🧱 REALISTIC AR VIEWPORT CAMERA BACKGROUND
+   ==================================================== */
+
+.camera-feed-mural {
+  /* 🛠️ THE FIXED FIT: Changed from 'cover' to 'contain' so the entire mural image shrinks to fit the window boundaries! */
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+/* Grays out or softens the mural background slightly once unlocked so your moving scale pops out */
+.dynamic-fade {
+  filter: brightness(0.7) contrast(0.9);
+  transition: filter 1s ease;
 }
