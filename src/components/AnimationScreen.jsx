@@ -7,11 +7,18 @@ import mermaidTattooImg from "../assets/MermaidTattoo.png";
 import anchorTattooImg from "../assets/AnchorTattoo.png";
 import oceanOnlyImg from "../assets/OceanOnly.png";
 
+// Import the far perspective view
+import handsMuralFar from "../assets/HandsMuralFar.png";
+
 export default function AnimationScreen({ muralId, muralImage }) {
   const [startEffects, setStartEffects] = useState(false);
 
   // useState tracker to handle which slide/subtitle shows up in the story movie
   const [storyStep, setStoryStep] = useState(1);
+
+  // Gamification states: Unlocks the quiz box and saves which button they click
+  const [quizUnlocked, setQuizUnlocked] = useState(false);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
 
   // small delay so the screen settles before the transitions starts
   useEffect(() => {
@@ -20,32 +27,23 @@ export default function AnimationScreen({ muralId, muralImage }) {
   }, []);
 
   // The slideshow timeline
-  // Using setTimeout chains to automatically advance the steps like a movie
   useEffect(() => {
     if (muralId !== "hands" || !startEffects) return;
 
-    // Step 2: Make the original mural picture split open down the middle
-    const t2 = setTimeout(() => setStoryStep(2), 4000);
+    const t2 = setTimeout(() => setStoryStep(2), 3000);
+    const t3 = setTimeout(() => setStoryStep(3), 6000);
+    const t4 = setTimeout(() => setStoryStep(4), 9000);
+    const t5 = setTimeout(() => setStoryStep(5), 12000);
+    const t6 = setTimeout(() => setStoryStep(6), 15000);
+    const tQuiz = setTimeout(() => setQuizUnlocked(true), 18000);
 
-    // Step 3: Switch to the image with only arms
-    const t3 = setTimeout(() => setStoryStep(3), 8000);
-
-    // Step 4: Hide the arms, show just the water image
-    const t4 = setTimeout(() => setStoryStep(4), 14000);
-
-    // Step 5: Mermaid tattoo close up appears
-    const t5 = setTimeout(() => setStoryStep(5), 18000);
-
-    // Step 6: Anchor tattoo close up appears
-    const t6 = setTimeout(() => setStoryStep(6), 24000);
-
-    // Cancels pending step timeouts if the user exists the screen early
     return () => {
       clearTimeout(t2);
       clearTimeout(t3);
       clearTimeout(t4);
       clearTimeout(t5);
       clearTimeout(t6);
+      clearTimeout(tQuiz);
     };
   }, [muralId, startEffects]);
 
@@ -94,33 +92,89 @@ export default function AnimationScreen({ muralId, muralImage }) {
 
       {/* Mural 2: Right through my fingers */}
       {muralId === "hands" && (
-        <div className="movie-stage-viewport">
-          {/* Steps 1 and 2: Render the wall image twice, but slice them with CSS clip-paths so they slide apart */}
-          {(storyStep === 1 || storyStep === 2) && (
-            <div className="cinema-camera-lens">
-              <motion.img
-                src={muralImage}
-                className="split-mural-half left-half-slice"
-                animate={{ x: storyStep === 2 ? -45 : 0 }}
-                transition={{ duration: 1.2, ease: "easeOut" }}
-              />
-              <motion.img
-                src={muralImage}
-                className="split-mural-half right-half-slice"
-                animate={{ x: storyStep === 2 ? 45 : 0 }}
-                transition={{ duration: 1.2, ease: "easeOut" }}
-              />
-            </div>
-          )}
+        <div
+          className="movie-stage-viewport"
+          style={{ position: "relative", background: "#ffffff" }}
+        >
+          {/* Background white layout box behind everything */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background: "#ffffff",
+              zIndex: 0,
+            }}
+          />
 
-          {/* Step 3: Arms only - Enters from the top, with a mirror loop so they bounce up and down slowly */}
+          {/* 🏢 PERMANENT BUILDING ENVIRONMENT FRAME LAYER */}
+          <div
+            className="cinema-camera-lens"
+            style={{
+              zIndex: 5,
+              position: "absolute",
+              inset: 0,
+              pointerEvents: "none",
+            }}
+          >
+            {/* 🔒 STATIC BACKGROUND FRAME LAYER */}
+            <img
+              src={handsMuralFar}
+              className="camera-feed-mural"
+              alt="Static Building Frame"
+              style={{
+                objectFit: "contain",
+                zIndex: 1,
+                clipPath:
+                  "polygon(0% 0%, 100% 0%, 100% 30%, 0% 30%, 0% 75%, 100% 75%, 100% 100%, 0% 100%)",
+              }}
+            />
+
+            {/* ✂️ LEFT MOVING MURAL PIECE */}
+            <motion.img
+              src={handsMuralFar}
+              className="split-mural-half"
+              style={{
+                objectFit: "contain",
+                zIndex: 2,
+                clipPath: "polygon(0% 30%, 50% 30%, 50% 75%, 0% 75%)",
+              }}
+              animate={{ x: storyStep >= 2 ? -60 : 0 }}
+              transition={{ duration: 1.5, ease: "easeInOut" }}
+            />
+
+            {/* ✂️ RIGHT MOVING MURAL PIECE */}
+            <motion.img
+              src={handsMuralFar}
+              className="split-mural-half"
+              style={{
+                objectFit: "contain",
+                zIndex: 2,
+                clipPath: "polygon(50% 30%, 100% 30%, 100% 75%, 50% 75%)",
+              }}
+              animate={{ x: storyStep >= 2 ? 60 : 0 }}
+              transition={{ duration: 1.5, ease: "easeInOut" }}
+            />
+          </div>
+
+          {/* 👐 STEP 3: HANDS ONLY */}
           {storyStep === 3 && (
             <motion.img
               key="hands-only"
               src={handsOnlyImg}
               className="camera-feed-mural focus-display-asset"
-              initial={{ opacity: 0, y: -60, scale: 0.95 }}
-              animate={{ opacity: 1, y: [-60, 0, -10, 0], scale: 1 }}
+              style={{
+                zIndex: 3,
+                objectFit: "contain",
+                mixBlendMode: "darken", // ✨ SWAPPED TO DARKEN TO FILTER OUT OPAQUE GRAY VALUE CHANNELS
+                filter: "contrast(1.1)", // Boosts white ceiling threshold values to clear edges
+                clipPath: "polygon(0% 30%, 100% 30%, 100% 75%, 0% 75%)",
+              }}
+              initial={{ opacity: 0, y: 120, scale: 0.55 }}
+              animate={{
+                opacity: 1,
+                y: [0, -6, 2, -4, 0],
+                scale: 0.55,
+              }}
               transition={{
                 y: {
                   times: [0, 0.2, 0.6, 1],
@@ -129,72 +183,87 @@ export default function AnimationScreen({ muralId, muralImage }) {
                   repeatType: "mirror",
                   ease: "easeInOut",
                 },
-                default: { duration: 0.8 },
+                default: { duration: 1.2, ease: "easeOut" },
               }}
             />
           )}
 
-          {/* Step 4: Water only - Slides in from the left side */}
+          {/* 🌊 STEP 4: WATER ONLY */}
           {storyStep === 4 && (
             <motion.img
               key="ocean-only"
               src={oceanOnlyImg}
               className="camera-feed-mural focus-display-asset"
-              initial={{ opacity: 0, x: -80 }}
-              animate={{ opacity: 1, x: [-80, 0, 8, 0] }}
-              transition={{
-                x: {
-                  times: [0, 0.2, 0.6, 1],
-                  duration: 4,
-                  repeat: Infinity,
-                  repeatType: "mirror",
-                  ease: "easeInOut",
-                },
-                default: { duration: 0.8 },
+              style={{
+                zIndex: 3,
+                objectFit: "contain",
+                mixBlendMode: "darken", // ✨ SWAPPED TO DARKEN
+                filter: "contrast(1.1)",
+                clipPath: "polygon(0% 30%, 100% 30%, 100% 75%, 0% 75%)",
               }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.0, ease: "easeOut" }}
             />
           )}
 
-          {/* Step 5: Mermaid tattoo close up, slides in from the right, scales in size back and forth */}
+          {/* 🧜‍♀️ STEP 5: MERMAID TATTOO */}
           {storyStep === 5 && (
             <motion.img
               key="mermaid-close"
               src={mermaidTattooImg}
               className="camera-feed-mural focus-display-asset"
-              initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0, scale: [1, 1.05, 0.98, 1] }}
-              transition={{
-                scale: { duration: 5, repeat: Infinity, ease: "easeInOut" },
-                default: { duration: 0.8, type: "spring", stiffness: 90 },
+              style={{
+                zIndex: 3,
+                objectFit: "contain",
+                mixBlendMode: "darken", // ✨ SWAPPED TO DARKEN
+                filter: "contrast(1.1)",
+                clipPath: "polygon(0% 30%, 100% 30%, 100% 75%, 0% 75%)",
               }}
+              initial={{ opacity: 0, x: 120, scale: 0.8 }}
+              animate={{ opacity: 1, x: 0, scale: 0.85 }}
+              transition={{ duration: 1.2, ease: "backOut" }}
             />
           )}
 
-          {/* Step 6: Anchor tattoo close up, slides up and then rotates 90 degrees so text reads flat */}
+          {/* ⚓ STEP 6: ANCHOR TATTOO */}
           {storyStep === 6 && (
             <motion.img
               key="anchor-close"
               src={anchorTattooImg}
               className="camera-feed-mural focus-display-asset"
-              initial={{ opacity: 0, y: 100, rotate: 0 }}
-              animate={{ opacity: 1, y: 0, rotate: 90 }}
+              style={{
+                zIndex: 3,
+                objectFit: "contain",
+                mixBlendMode: "darken", // ✨ SWAPPED TO DARKEN
+                filter: "contrast(1.1)",
+                clipPath: "polygon(0% 30%, 100% 30%, 100% 75%, 0% 75%)",
+              }}
+              initial={{ opacity: 0, y: 140, rotate: 0, scale: 0.8 }}
+              animate={{ opacity: 1, y: 0, rotate: 90, scale: 0.85 }}
               transition={{
-                rotate: { delay: 1.5, duration: 1.2, ease: "backOut" },
-                default: { duration: 0.8, ease: "easeOut" },
+                rotate: { delay: 0.6, duration: 1.2, ease: "backOut" },
+                default: { duration: 1.0, ease: "easeOut" },
               }}
             />
           )}
 
-          {/* Subtitles that go under at the bottom */}
-          <div className="subtitle-overlay-track">
+          {/* 💬 SUBTITLES TRACK LAYER */}
+          <div
+            className="subtitle-overlay-track"
+            style={{ zIndex: 10, bottom: "8px" }}
+          >
             {storyStep === 1 && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 className="narrative-subtitle-card"
+                style={{ padding: "8px 12px" }}
               >
-                <h3>Right Through My Fingers</h3>
-                <p>
+                <h3 style={{ fontSize: "0.85rem", marginBottom: "2px" }}>
+                  Right Through My Fingers
+                </h3>
+                <p style={{ fontSize: "0.68rem", lineHeight: "1.3" }}>
                   This image shows a set of hands outstretched, submerged in
                   ocean waters.
                 </p>
@@ -206,12 +275,14 @@ export default function AnimationScreen({ muralId, muralImage }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 className="narrative-subtitle-card dynamic-alert-border"
+                style={{ padding: "8px 12px" }}
               >
-                <h3>The Hands Splitting</h3>
-                <p>
-                  The hands are moving together, but split into two sections, to
-                  show that while efforts are being made, there is still more
-                  work to be done before all humans come together.
+                <h3 style={{ fontSize: "0.85rem", marginBottom: "2px" }}>
+                  The Hands Splitting
+                </h3>
+                <p style={{ fontSize: "0.68rem", lineHeight: "1.3" }}>
+                  The hands split to show that more work must be done before all
+                  humans come together.
                 </p>
               </motion.div>
             )}
@@ -221,12 +292,14 @@ export default function AnimationScreen({ muralId, muralImage }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 className="narrative-subtitle-card"
+                style={{ padding: "8px 12px" }}
               >
-                <h3>The Subject</h3>
-                <p>
-                  Specifically, it is a portrait of my own hands... Images of
-                  hands positioned in this manner often represent cleansing,
-                  honest, and truthful intentions.
+                <h3 style={{ fontSize: "0.85rem", marginBottom: "2px" }}>
+                  The Subject
+                </h3>
+                <p style={{ fontSize: "0.68rem", lineHeight: "1.3" }}>
+                  Specifically, it is a portrait of my own hands... representing
+                  cleansing, honest, and truthful intentions.
                 </p>
               </motion.div>
             )}
@@ -236,12 +309,14 @@ export default function AnimationScreen({ muralId, muralImage }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 className="narrative-subtitle-card"
+                style={{ padding: "8px 12px" }}
               >
-                <h3>The Atlantic Connection</h3>
-                <p>
+                <h3 style={{ fontSize: "0.85rem", marginBottom: "2px" }}>
+                  The Atlantic Connection
+                </h3>
+                <p style={{ fontSize: "0.68rem", lineHeight: "1.3" }}>
                   Photographed on the shores of Miami Beach—across the Atlantic,
-                  7,500 kilometers away, we are connected to Denmark by the same
-                  body of water.
+                  7,500 kilometers away from Denmark.
                 </p>
               </motion.div>
             )}
@@ -251,31 +326,175 @@ export default function AnimationScreen({ muralId, muralImage }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 className="narrative-subtitle-card"
+                style={{ padding: "8px 12px" }}
               >
-                <span className="tattoo-meta-badge">RIGHT ARM</span>
-                <h3>The Mermaid Tattoo</h3>
-                <p>
-                  A nod to Denmark, derived from Danish literature. The mermaid
-                  represents an intrinsic human connection to the water,
-                  relatable across cultures.
+                <span
+                  className="tattoo-meta-badge"
+                  style={{ marginBottom: "4px", padding: "1px 4px" }}
+                >
+                  RIGHT ARM
+                </span>
+                <h3 style={{ fontSize: "0.85rem", marginBottom: "2px" }}>
+                  The Mermaid Tattoo
+                </h3>
+                <p style={{ fontSize: "0.68rem", lineHeight: "1.3" }}>
+                  A nod to Denmark, representing an intrinsic human connection
+                  to the water across cultures.
                 </p>
               </motion.div>
             )}
 
             {storyStep === 6 && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="narrative-subtitle-card"
-              >
-                <span className="tattoo-meta-badge">LEFT ARM</span>
-                <h3>The Anchor & Promise</h3>
-                <p>
-                  First tattooed on sailors who crossed an ocean, it represents
-                  commitment. The message 'Love you see you' represents
-                  preserving what we have for our children's future.
-                </p>
-              </motion.div>
+              <>
+                {!quizUnlocked ? (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="narrative-subtitle-card"
+                    style={{ padding: "8px 12px" }}
+                  >
+                    <span
+                      className="tattoo-meta-badge"
+                      style={{ marginBottom: "4px", padding: "1px 4px" }}
+                    >
+                      LEFT ARM
+                    </span>
+                    <h3 style={{ fontSize: "0.85rem", marginBottom: "2px" }}>
+                      The Anchor & Promise
+                    </h3>
+                    <p style={{ fontSize: "0.68rem", lineHeight: "1.3" }}>
+                      First tattooed on sailors who crossed an ocean, it
+                      represents commitment to preserving our children's future.
+                    </p>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    className="narrative-subtitle-card dynamic-alert-border"
+                    style={{ padding: "10px 12px" }}
+                  >
+                    <h3 style={{ fontSize: "0.88rem", marginBottom: "2px" }}>
+                      SDG Guessing Game
+                    </h3>
+                    <p style={{ marginBottom: "8px", fontSize: "0.68rem" }}>
+                      Which SDG does this mural protect?
+                    </p>
+
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "6px",
+                      }}
+                    >
+                      <button
+                        onClick={() => setSelectedAnswer("wrong-6")}
+                        style={{
+                          background:
+                            selectedAnswer === "wrong-6"
+                              ? "#ff007f"
+                              : "#1e293b",
+                          color: "#fff",
+                          border: "1px solid #334155",
+                          padding: "6px",
+                          borderRadius: "6px",
+                          cursor: "pointer",
+                          textAlign: "left",
+                          fontSize: "0.7rem",
+                        }}
+                      >
+                        SDG 6: Clean Water & Sanitation
+                      </button>
+                      <button
+                        onClick={() => setSelectedAnswer("wrong-13")}
+                        style={{
+                          background:
+                            selectedAnswer === "wrong-13"
+                              ? "#ff007f"
+                              : "#1e293b",
+                          color: "#fff",
+                          border: "1px solid #334155",
+                          padding: "6px",
+                          borderRadius: "6px",
+                          cursor: "pointer",
+                          textAlign: "left",
+                          fontSize: "0.7rem",
+                        }}
+                      >
+                        SDG 13: Climate Action
+                      </button>
+                      <button
+                        onClick={() => setSelectedAnswer("correct")}
+                        style={{
+                          background:
+                            selectedAnswer === "correct"
+                              ? "#00ffcc"
+                              : "#1e293b",
+                          color:
+                            selectedAnswer === "correct" ? "#08111f" : "#fff",
+                          border: "1px solid #334155",
+                          padding: "6px",
+                          borderRadius: "6px",
+                          cursor: "pointer",
+                          textAlign: "left",
+                          fontSize: "0.7rem",
+                          fontWeight:
+                            selectedAnswer === "correct" ? "bold" : "normal",
+                        }}
+                      >
+                        SDG 14: Life Below Water
+                      </button>
+                      <button
+                        onClick={() => setSelectedAnswer("wrong-17")}
+                        style={{
+                          background:
+                            selectedAnswer === "wrong-17"
+                              ? "#ff007f"
+                              : "#1e293b",
+                          color: "#fff",
+                          border: "1px solid #334155",
+                          padding: "6px",
+                          borderRadius: "6px",
+                          cursor: "pointer",
+                          textAlign: "left",
+                          fontSize: "0.7rem",
+                        }}
+                      >
+                        SDG 17: Partnerships for the Goals
+                      </button>
+                    </div>
+
+                    {selectedAnswer && selectedAnswer !== "correct" && (
+                      <p
+                        style={{
+                          color: "#ff007f",
+                          fontSize: "0.65rem",
+                          marginTop: "6px",
+                          marginBottom: 0,
+                        }}
+                      >
+                        Hint: Think about the sea water connecting Miami Beach
+                        to Denmark! Try again!
+                      </p>
+                    )}
+
+                    {selectedAnswer === "correct" && (
+                      <p
+                        style={{
+                          color: "#00ffcc",
+                          fontSize: "0.65rem",
+                          marginTop: "6px",
+                          marginBottom: 0,
+                        }}
+                      >
+                        CORRECT! You unlocked the Marine Protection Stamp for
+                        your collection gallery!
+                      </p>
+                    )}
+                  </motion.div>
+                )}
+              </>
             )}
           </div>
         </div>
