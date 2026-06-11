@@ -4,14 +4,12 @@ import MuralSelector from "./components/MuralSelector";
 import ScanScreen from "./components/ScanScreen";
 import AnimationScreen from "./components/AnimationScreen";
 import "./App.css";
-
-// Importing the assets so Vite links our local image library files smoothly
 import butterflyMural from "./assets/ButterflyMural.png";
 import handsMural from "./assets/HandsMural.png";
 import handsMuralFar from "./assets/HandsMuralFar.png";
 
 export default function App() {
-  // App state variables: 'HUB' (Main Grid), 'SCAN' (Viewfinder Mode), 'ANIMATION' (Exhibition Slide Deck)
+  // App state variables: 'HUB' (Main screen), 'SCAN' (Viewfinder Mode), 'ANIMATION'
   const [appState, setAppState] = useState("HUB");
   const [selectedMuralId, setSelectedMuralId] = useState(null);
 
@@ -24,7 +22,7 @@ export default function App() {
     },
     hands: {
       scanImage: handsMuralFar, // Far shot for scanning mode
-      animationImage: handsMural, // Close up crop for the story mode
+      animationImage: handsMural, // Close up crop for the story/movie mode
       stencilType: "viewfinder",
     },
   };
@@ -41,7 +39,7 @@ export default function App() {
   return (
     <main className="stage">
       <div className="app-container">
-        {/* Dynamic header tracker changes sub-copy depending on which step index is current */}
+        {/* Dynamic header tracker changes depending on which step index is current */}
         <header className="app-header">
           <h1>Living Walls</h1>
           <p>
@@ -78,7 +76,7 @@ export default function App() {
           </AnimatePresence>
         </div>
 
-        {/* FOOTER BUTTON CODES: Swaps view states back and forth */}
+        {/* Footer buttons */}
         {appState !== "HUB" && (
           <div style={{ display: "flex", gap: "12px", marginTop: "16px" }}>
             <motion.button

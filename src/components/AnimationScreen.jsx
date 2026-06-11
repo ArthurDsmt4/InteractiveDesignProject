@@ -185,7 +185,7 @@ export default function AnimationScreen({ muralId, muralImage }) {
             />
           )}
 
-          {/* CONDITIONALLY RENDERING SUBTITLE TEXT BLOCKS MATCHING THE TIMELINE TRACK */}
+          {/* Subtitles that go under at the bottom */}
           <div className="subtitle-overlay-track">
             {storyStep === 1 && (
               <motion.div
@@ -250,7 +250,7 @@ export default function AnimationScreen({ muralId, muralImage }) {
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="narrative-subtitle-card" // Fixed class hook!
+                className="narrative-subtitle-card"
               >
                 <span className="tattoo-meta-badge">RIGHT ARM</span>
                 <h3>The Mermaid Tattoo</h3>

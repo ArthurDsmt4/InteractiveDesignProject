@@ -10,11 +10,11 @@ export default function ScanScreen({ muralImage, stencilType }) {
       exit={{ opacity: 0 }}
       className="screen-content scan-bg"
     >
-      {/* Background container displaying the live camera simulator frame asset */}
+      {/* Background container displaying the live camera simulator frame */}
       <img src={muralImage} className="camera-feed-mural" alt="Mural Target" />
 
-      {/* STENCIL CONDITIONAL OVERLAYS */}
-      {/* If looking at the butterfly scale mural, show the neon green vector layout */}
+      {/* Stencil overlay */}
+      {/* If looking at the butterfly scale mural, show the neon green base of the balance */}
       {stencilType === "silhouette" && (
         <motion.img
           src={scaleBase}
@@ -24,7 +24,7 @@ export default function ScanScreen({ muralImage, stencilType }) {
         />
       )}
 
-      {/* If looking at the hands mural, bring up the 4 corners layout frame layer */}
+      {/* If looking at the hands mural, bring up the 4 corners layout frame */}
       {stencilType === "viewfinder" && (
         <motion.div
           className="ar-target-box"

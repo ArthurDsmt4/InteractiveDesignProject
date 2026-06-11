@@ -1,18 +1,18 @@
 import { motion } from "motion/react";
 
 export default function MuralSelector({ onSelectMural }) {
-  // Array array array matrix list for the menu setup. Slot 1 and 2 open screens, 3 is just filler text.
+  // Menu setup
   const murals = [
-    { id: "scale", title: "The Cosmic Scale", location: "North Wall - Lane 4" },
+    { id: "scale", title: "Life on the edge", location: "Frederiksgade 33" },
     {
       id: "hands",
-      title: "Right Through My Fingers",
-      location: "East Wing Facade",
-    }, // active target link
+      title: "Right through my fingers",
+      location: "Europaplads 10 - Hotel Atlantic",
+    },
     {
       id: "placeholder_2",
-      title: "Mural Discovery C",
-      location: "Main Plaza Archway",
+      title: "???",
+      location: "???",
     },
   ];
 
@@ -39,9 +39,9 @@ export default function MuralSelector({ onSelectMural }) {
             className="mural-card-button"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => onSelectMural(mural.id)} // Fires selection function up to parent state container
+            onClick={() => onSelectMural(mural.id)}
           >
-            {/* Status dot turns gray for placeholder strings using conditional inline styling checks */}
+            {/* Status for the discoverable murals green/gray - active/inactive */}
             <div
               className="card-status-dot"
               style={{

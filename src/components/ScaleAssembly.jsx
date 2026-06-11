@@ -4,6 +4,9 @@ import scaleCrossbar from "../assets/horizontal-bar.png";
 import leftBasket from "../assets/left-basket.png";
 import rightBasket from "../assets/right-basket.png";
 
+// This handles the infinity looping rotation for the scale.
+// The child baskets counter rotate against the parent wrapper so they don't tilt sideways.
+
 export default function ScaleAssembly() {
   return (
     <div className="scale-assembly">
